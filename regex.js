@@ -8,14 +8,26 @@ var email=document.getElementById("email");
 var errorEmail=document.getElementById("errorEmail");
 //-----------------------------------------------------
 
+//VARIABLES PASSWORD
+var password=document.getElementById("password");
+var errorPassword=document.getElementById("errorPassword");
+var ojito=document.getElementById("ojito");
+//-----------------------------------------------------
+
 //KEYUP EN EL INPUT BOX DEL CELULAR----------------------
 numeroCelular.addEventListener("keyup",regexCelular);
 //numeroCelular.style.backgroundColor="white";
 
-
 //KEYUP EN EL INPUT BOX DEL EMAIL--------------------------
 email.addEventListener("keyup",regexEmail);
 //-----------------------------------------------------------
+//KEYUP EN EL INPUT BOX DEL PASSWORD--------------------------
+password.addEventListener("keyup",regexPassword);
+//-----------------------------------------------------------
+
+//CLICK EN EL INPUT BOX OJITO DEL PASSWORD----------
+ojito.addEventListener("click",ojitoAD);
+//---------------------------------------------------
 function regexCelular()
 {
     var valorCajaCelular=numeroCelular.value;
@@ -73,4 +85,43 @@ function regexEmail()
         }    
     }
 
+}
+
+function regexPassword()
+{
+    var regexPas=/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\.)[\S]{8,20}$/
+    //^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\.).{8,20}$/
+    var resultadoPassword=regexPas.test(password.value);
+    if (resultadoPassword==true)
+    {   
+        password.style.backgroundColor="#3eae";
+        errorPassword.innerHTML="Password correcto";
+        errorPassword.style.color="green";
+    }
+    else{
+        if(password.value=="")
+        {
+        password.style.backgroundColor="white";
+        errorPassword.innerHTML="Digite su password";
+        errorPassword.style.color="black";
+        }
+        else{
+        password.style.backgroundColor="#e71837";
+        errorPassword.innerHTML="Digite bien el password, recuerde que debe tener entre 8 a 20 caracteres, al menos: 1 letra Mayúscula, 1 letra Minúscula, 1 Número y 1 Punto y sin Espacios" ;
+        errorPassword.style.color="#e71837"; 
+        }    
+    }
+
+}
+
+function ojitoAD()
+{
+    if (ojito.checked===true)
+    {
+        password.type= "password";
+    }
+    else
+    {
+        password.type= "text";
+    }
 }
