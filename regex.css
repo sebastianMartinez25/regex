@@ -10,20 +10,26 @@ background-color: rgb(214, 208, 201);
 #nCelular {
     width: 320px;
     height: 37px;
-    font-size: 15px;
+    font-size: 18px;
     font-family: 'Trebuchet MS';
 }
 
 #email{
     width: 600px;
     height: 37px;
-    font-size: 15px;
+    font-size: 18px;
     font-family: 'Trebuchet MS';
 }
 #password {
     width: 320px;
     height: 37px;
-    font-size: 15px;
+    font-size: 18px;
+    font-family: 'Trebuchet MS';
+}
+#moneda{
+    width: 320px;
+    height: 37px;
+    font-size: 18px;
     font-family: 'Trebuchet MS';
 }
 #enunciados{
