@@ -19,6 +19,10 @@ var moneda=document.getElementById("moneda");
 var errorMoneda=document.getElementById("errorMoneda");
 //-------------------------------------------------------
 
+//VARIABLES PARA CONVERTIR A FORMATO MONEDA (MONEDITA)
+var monedita=document.getElementById("monedita");
+//-----------------------------------------------------
+
 //KEYUP EN EL INPUT BOX DEL CELULAR----------------------
 numeroCelular.addEventListener("keyup",regexCelular);
 //numeroCelular.style.backgroundColor="white";
@@ -33,13 +37,18 @@ password.addEventListener("keyup",regexPassword);
 //CLICK EN EL INPUT BOX OJITO DEL PASSWORD----------
 ojito.addEventListener("click",ojitoAD);
 //---------------------------------------------------
-//KEYPRESS VALIDAR QUE SEA UN NÚMERO LA MONEDA------
-//moneda.addEventListener("keypress",digitV);
-//--------------------------------------------------
-//KEYUP CONVERTIR NÚMERO A MONEDA-------------------
+
+//KEYUP admite solo formato MONEDA-------------------
 moneda.addEventListener("keyup",convertMoneda);
 //--------------------------------------------------
 
+//KEYPRESS VALIDAR QUE SEA UN NÚMERO LA MONEDA------
+//moneda.addEventListener("keypress",digitV);
+//--------------------------------------------------
+
+//KEYUP CONVERTIR A FORMATO MONEDITA---------------
+monedita.addEventListener("keyup",formateoMonedita);
+//-------------------------------------------------
 function regexCelular()
 {
     var valorCajaCelular=numeroCelular.value;
@@ -70,10 +79,6 @@ function regexCelular()
 function regexEmail()
 {
     var regexE=/^(?=.{3,64}@.{2,255}$)(?=.{3,64}@.{2,255}\..{2,6}$)([a-zA-Z0-9]+((\.|\-|\_|__)?[a-zA-Z0-9]+)*)+@([a-zA-Z0-9]{2,}((\.|\-)?[a-zA-Z0-9]+)*)+\.([a-zA-Z0-9]{2,}((\.)?[a-zA-Z0-9]{2,})*)+$/
-    //^(?=.{3,64}@.{2,255}$)(?=.{3,64}@.{2,255}\..{2,6}$)([a-zA-Z0-9]+(\.|\-|\_|__)?[a-zA-Z0-9]+)*@([a-zA-Z0-9]+(\.|\-)?[a-zA-Z0-9]+)*\.[a-zA-Z0-9]+$/
-
-    //^(?=.{3,64}$)([a-zA-Z0-9]+((\.|\-|_|__)?[a-zA-Z0-9]+)*)@[a-zA-Z0-9]$/;
-    //^([a-zA-Z\d]+([\.]?[a-zA-Z\d]+)*([\-]?[a-zA-Z0-9]+)*([\_]{0,2}[a-zA-Z0-9]+)*){3,8}$/;
     
     var resultadoEmail=regexE.test(email.value);
     if (resultadoEmail==true)
@@ -95,13 +100,11 @@ function regexEmail()
         errorEmail.style.color="#e71837"; 
         }    
     }
-
 }
 
 function regexPassword()
 {
     var regexPas=/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\.)[\S]{8,20}$/
-    //^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\.).{8,20}$/
     var resultadoPassword=regexPas.test(password.value);
     if (resultadoPassword==true)
     {   
@@ -135,35 +138,9 @@ function ojitoAD()
         password.type= "text";
     }
 }
-
-/*function digitV(numero)
-{
-    var regexDigit=/^[\d]+$/;
-    var caracter=numero.key;
-        if (regexDigit.test(caracter))
-        {
-        }
-        else
-        {
-            numero.preventDefault();   
-        }
-}*/
 function convertMoneda(numero)
 {
-    /*var numeroFormateado=parseFloat(moneda.value).toFixed(2);
-    numeroFormateado=numeroFormateado.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') // separar miles con puntos
-    .replace('.', ',');
-    moneda.value=numeroFormateado;
-    /*var numeroFormateado=moneda.value.replace(/[^\d]/g,'');
-    console.log(numeroFormateado);*/
-    //var numeroFormateado=moneda.value;
-    /*numeroFormateado=parseFloat(moneda.value).toFixed(2);
-    console.log(numeroFormateado);*/
-    /*numeroFormateado=numeroFormateado.replace((/\B(?=(\.\d{1,2})?(?!\d))/g, ','))
-   console.log(numeroFormateado);*/
-/*numeroFormateado=numeroFormateado.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-    moneda.value=numeroFormateado;*/
-    var regexMoney=/^-?(?:\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?)$/
+    var regexMoney=/^-?(?:\d{1,3}(?:\.\d{3})*(?:,\d{1,})?)$/
     var resultadoMoney=regexMoney.test(moneda.value);
     if (resultadoMoney==true)
     {   
@@ -185,6 +162,15 @@ function convertMoneda(numero)
         }    
     }   
 }
+
+function formateoMonedita()
+{
+  var numeroF=number_format(monedita.value,2);
+  
+  monedita.value=numeroF;
+
+}
+
 /*function convertirMoneda(input)
 {
     // Eliminar cualquier carácter que no sea un número
@@ -197,3 +183,26 @@ function convertMoneda(numero)
     input.value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') + ',00';
   }
 }*/
+
+function number_format(amount, decimals) {
+
+    amount += ''; // por si pasan un numero en vez de un string
+    amount = parseFloat(amount.replace(/[^0-9\.]/g, '')); // elimino cualquier cosa que no sea numero o punto
+
+    decimals = decimals || 0; // por si la variable no fue fue pasada
+
+    // si no es un numero o es igual a cero retorno el mismo cero
+    if (isNaN(amount) || amount === 0) 
+        return parseFloat(0).toFixed(decimals);
+
+    // si es mayor o menor que cero retorno el valor formateado como numero
+    amount = '' + amount.toFixed(decimals);
+
+    var amount_parts = amount.split('.'),
+        regexp = /(\d+)(\d{3})/;
+
+    while (regexp.test(amount_parts[0]))
+        amount_parts[0] = amount_parts[0].replace(regexp, '$1' + ',' + '$2');
+
+    return amount_parts.join('.');
+}
