@@ -185,26 +185,58 @@ function formateoMonedita()
 }*/
 
 function number_format(amount, decimals) {
-    console.log(amount +" -" + monedita.value);
+    var numeroLimite=parseFloat(999999999999);
+    var monto=parseFloat(amount.replace(/\,/g,""));
+    if (monto<=numeroLimite)
+    {
+        console.log(numeroLimite + " - " + parseFloat(amount));
+        console.log(amount +" -" + monedita.value);
+        console.log(parseFloat(amount.replace(/\,/g,"")));
     amount += ''; // por si pasan un numero en vez de un string
-    amount = parseFloat(amount.replace(/[^0-9\.]/g, '')); // elimino cualquier cosa que no sea numero o punto
-    console.log(amount);
+    amount = amount.replace(/[^0-9\.]/g, ''); // elimino cualquier cosa que no sea numero o punto
+    
     decimals = decimals || 0; // por si la variable no fue fue pasada
 
     // si no es un numero o es igual a cero retorno el mismo cero
-    if (isNaN(amount) || amount === 0) {
+    if (isNaN(parseFloat(amount)) || parseFloat(amount) === 0) {
         return parseFloat(0).toFixed(decimals);
     }
         
     else{
         // si es mayor o menor que cero retorno el valor formateado como numero
-
-    amount = '' + parseFloat(amount)
-        console.log(amount);
-    var partes=amount.split('.');
+        var regexPunto=/[\.]/
+        var amount2=""+amount;
+        var cadenaAmount=""+amount2;
+        var longCadena;
+        console.log(cadenaAmount);
+        console.log(amount2);
+        if(!regexPunto.test(amount2))
+        {
+            cadenaAmount=cadenaAmount.split("");
+            
+            longCadena=cadenaAmount.length;
+            if (longCadena<=2)
+            {
+                amount2=""+parseFloat(amount).toFixed(decimals);   
+            }
+            else{
+            cadenaAmount.splice(longCadena-2,0,".");
+            amount=cadenaAmount.join(',');
+            amount=parseFloat(amount.replace(/,/g,''));
+            console.log(amount);
+            amount2=""+parseFloat(amount).toFixed(decimals);
+            } 
+            console.log(longCadena);
+        }
+        else{
+        }
+    console.log(amount2 +"--" + amount +"-"+parseFloat(amount));
+    var partes=amount2.split('.');
+    
     var entero=partes[0].split("");
     var decimales=partes[1].split("");
     var numeroDecimales=decimales.length;
+    console.log(partes);
     console.log(entero+"&"+decimales);
     var position;
     var positionValue;
@@ -220,17 +252,26 @@ function number_format(amount, decimals) {
 
             numeroDecimales--;
             console.log(entero+"&"+decimales);
-        }    
+        }
+        amount2=""+entero.join("")+"."+decimales.join("");
+    amount=""+parseFloat(amount2).toFixed(decimals); 
+    console.log(amount);
     }
-    amount=""+entero.join("")+"."+decimales.join("");
-    amount=parseFloat(amount).toFixed(decimals);   
+    else{
+        amount=""+parseFloat(amount2).toFixed(decimals);
+        console.log(amount);
+    }
     var amount_parts = amount.split('.'),
         regexp = /(\d+)(\d{3})/;
 
     while (regexp.test(amount_parts[0]))
         amount_parts[0] = amount_parts[0].replace(regexp, '$1' + ',' + '$2');
     }
-    
-
     return amount_parts.join('.');
+    }
+
+    else{
+        return parseFloat(0).toFixed(decimals);
+    }
+    
 }
