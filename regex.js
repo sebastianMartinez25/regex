@@ -185,24 +185,52 @@ function formateoMonedita()
 }*/
 
 function number_format(amount, decimals) {
-
+    console.log(amount +" -" + monedita.value);
     amount += ''; // por si pasan un numero en vez de un string
     amount = parseFloat(amount.replace(/[^0-9\.]/g, '')); // elimino cualquier cosa que no sea numero o punto
-
+    console.log(amount);
     decimals = decimals || 0; // por si la variable no fue fue pasada
 
     // si no es un numero o es igual a cero retorno el mismo cero
-    if (isNaN(amount) || amount === 0) 
+    if (isNaN(amount) || amount === 0) {
         return parseFloat(0).toFixed(decimals);
+    }
+        
+    else{
+        // si es mayor o menor que cero retorno el valor formateado como numero
 
-    // si es mayor o menor que cero retorno el valor formateado como numero
-    amount = '' + amount.toFixed(decimals);
+    amount = '' + parseFloat(amount)
+        console.log(amount);
+    var partes=amount.split('.');
+    var entero=partes[0].split("");
+    var decimales=partes[1].split("");
+    var numeroDecimales=decimales.length;
+    console.log(entero+"&"+decimales);
+    var position;
+    var positionValue;
+    if (numeroDecimales>=3)
+    {
+        while(numeroDecimales>=3)
+        {
+            position=numeroDecimales-2;
+            positionValue=decimales[position-1];
+            console.log(positionValue);
+            entero.push(positionValue);
+            decimales.splice(position-1,1);
 
+            numeroDecimales--;
+            console.log(entero+"&"+decimales);
+        }    
+    }
+    amount=""+entero.join("")+"."+decimales.join("");
+    amount=parseFloat(amount).toFixed(decimals);   
     var amount_parts = amount.split('.'),
         regexp = /(\d+)(\d{3})/;
 
     while (regexp.test(amount_parts[0]))
         amount_parts[0] = amount_parts[0].replace(regexp, '$1' + ',' + '$2');
+    }
+    
 
     return amount_parts.join('.');
 }
