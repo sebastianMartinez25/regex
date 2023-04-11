@@ -21,6 +21,8 @@ var errorMoneda=document.getElementById("errorMoneda");
 
 //VARIABLES PARA CONVERTIR A FORMATO MONEDA (MONEDITA)
 var monedita=document.getElementById("monedita");
+var errorMonedita=document.getElementById("errorMonedita");
+var errorPesito=document.getElementById("errorPesito");
 //-----------------------------------------------------
 
 //KEYUP EN EL INPUT BOX DEL CELULAR----------------------
@@ -49,6 +51,15 @@ moneda.addEventListener("keyup",convertMoneda);
 //KEYUP CONVERTIR A FORMATO MONEDITA---------------
 monedita.addEventListener("keyup",formateoMonedita);
 //-------------------------------------------------
+//GRAGEND ARRASTRAR Y SOLTAR AL FORMATEO MONEDITA---
+monedita.addEventListener("drop",function(event)
+{
+    event.preventDefault();
+    var datos=event.dataTransfer.getData("text/plain");
+    var numeroFormat=number_format(datos,2);
+    monedita.value=numeroFormat;
+});
+//----------------------------------------------------
 function regexCelular()
 {
     var valorCajaCelular=numeroCelular.value;
@@ -166,9 +177,7 @@ function convertMoneda(numero)
 function formateoMonedita()
 {
   var numeroF=number_format(monedita.value,2);
-  
   monedita.value=numeroF;
-
 }
 
 /*function convertirMoneda(input)
@@ -189,6 +198,10 @@ function number_format(amount, decimals) {
     var monto=parseFloat(amount.replace(/\,/g,""));
     if (monto<=numeroLimite)
     {
+        monedita.style.backgroundColor="rgb(1, 1, 65)";
+        errorMonedita.innerHTML="";
+        errorPesito.style.backgroundColor="rgb(1, 1, 65)";
+
         console.log(numeroLimite + " - " + parseFloat(amount));
         console.log(amount +" -" + monedita.value);
         console.log(parseFloat(amount.replace(/\,/g,"")));
@@ -271,6 +284,10 @@ function number_format(amount, decimals) {
     }
 
     else{
+        monedita.style.backgroundColor="#e71837";
+        errorMonedita.innerHTML="Digite un valor que no sea mayor a: $999,999,999,999";
+        errorMonedita.style.color="#e71837"; 
+        errorPesito.style.backgroundColor="#e71837";
         return parseFloat(0).toFixed(decimals);
     }
     
