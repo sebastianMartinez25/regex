@@ -45,13 +45,13 @@ moneda.addEventListener("keyup",convertMoneda);
 //--------------------------------------------------
 
 //KEYPRESS VALIDAR QUE SEA UN NÚMERO LA MONEDA------
-//moneda.addEventListener("keypress",digitV);
+monedita.addEventListener("keypress",digitV);
 //--------------------------------------------------
 
 //KEYUP CONVERTIR A FORMATO MONEDITA---------------
 monedita.addEventListener("keyup",formateoMonedita);
 //-------------------------------------------------
-//GRAGEND ARRASTRAR Y SOLTAR AL FORMATEO MONEDITA---
+//DRAG AND DROP END ARRASTRAR Y SOLTAR AL FORMATEO MONEDITA---
 monedita.addEventListener("drop",function(event)
 {
     event.preventDefault();
@@ -60,6 +60,17 @@ monedita.addEventListener("drop",function(event)
     monedita.value=numeroFormat;
 });
 //----------------------------------------------------
+
+// VALIDAR LO QUE SE COPIA Y PEGA EN EL INPUT MONEDITA--
+monedita.addEventListener("paste",function(portapapeles)
+{
+    portapapeles.preventDefault();
+    var datoPortapapel=portapapeles.clipboardData || window.clipboardData;
+    var portapapelText=datoPortapapel.getData("text");
+    var formatNumber=number_format(portapapelText,2);
+    monedita.value=formatNumber;
+});
+//--------------------------------------------------------
 function regexCelular()
 {
     var valorCajaCelular=numeroCelular.value;
@@ -180,19 +191,6 @@ function formateoMonedita()
   monedita.value=numeroF;
 }
 
-/*function convertirMoneda(input)
-{
-    // Eliminar cualquier carácter que no sea un número
-  input.value = input.value.replace(/[^0-9]/g, '');
-
-  // Verificar si el valor es numérico antes de formatearlo
-  if (!isNaN(input.value)) {
-    // Formatear el número en formato de moneda
-    let value = parseFloat(input.value.replace(',', '.')).toFixed(2);
-    input.value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') + ',00';
-  }
-}*/
-
 function number_format(amount, decimals) {
     var numeroLimite=parseFloat(999999999999);
     var monto=parseFloat(amount.replace(/\,/g,""));
@@ -285,10 +283,21 @@ function number_format(amount, decimals) {
 
     else{
         monedita.style.backgroundColor="#e71837";
-        errorMonedita.innerHTML="Digite un valor que no sea mayor a: $999,999,999,999";
+        errorMonedita.innerHTML="Digite un número que no sea mayor a: $999,999,999,999";
         errorMonedita.style.color="#e71837"; 
         errorPesito.style.backgroundColor="#e71837";
         return parseFloat(0).toFixed(decimals);
     }
     
+}
+
+function digitV(cKey)
+{ 
+ var regexNumber=/^\d$/;
+ var caracter=cKey.key;
+ if (regexNumber.test(caracter))
+ {} 
+ else{
+    cKey.preventDefault();
+ }
 }
